@@ -1,0 +1,110 @@
+.card {
+  padding: 0.5rem;
+  border: 1px solid $grey-01;
+  border-radius: 0.5rem;
+  display: flex;
+  color: $grey-02;
+  font-size: 14px;
+  gap: 1rem;
+  
+  &-mini {
+    flex-direction: column;
+    max-width: 350px;
+  }
+
+  &-large {
+    flex-direction: row;
+  }
+
+  &__image {
+    background-color: $grey-01;
+    overflow:hidden;
+
+    &-mini {
+      height: 200px;
+      width: 100%;
+      border-radius: 0.5rem;
+    }
+
+    &-large {
+      flex-wrap: wrap;
+      flex: 1 0 35%;
+      height: 280px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+   
+  &__metaData {
+    display: inline-flex;
+    gap: 0.25rem;
+    font-size: 12px;
+
+    &-bold {
+      font-weight: 700;
+      color: $grey-03;
+    }
+  }
+
+  &__title {    
+    color: $grey-04;
+
+    &-mini {
+      font-size: 18px;
+      font-weight: 700;
+      padding: 0.75rem 0 0.25rem;
+    }
+
+    &-large {
+      font-size: 22px;
+      font-weight: 900;
+      padding: 0.75rem 0 0.5rem;
+    }
+  }
+
+  &__content {
+    line-height: 21px;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+
+    &-mini {
+      -webkit-line-clamp: 4;
+    }
+
+    &-large {
+      -webkit-line-clamp: 7;
+    }
+  }
+
+  &__footNote {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+
+    &-mini {
+      padding-top: 1rem;
+    }
+
+    &-large {
+      padding-top: 2rem;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: $primary;
+    font-weight: 700;
+  }
+}
