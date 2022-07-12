@@ -1,65 +1,46 @@
 <template>
   <div>
     <section class="home">
-      <!-- Todo:: add appropriate padding -->
-      <Card 
-        :id="2345"
-        type="large"
-        image="https://techcrunch.com/wp-content/uploads/2022/07/IMG_9938-Enhanced.jpg"
-        imageAlt="blog 2345 image"
-        category="Front-end"
-        title="Optimizing CSS for faster page loads"
-        :publishedDate="new Date('2022-07-09T09:00:16')"
-        :content="`Not long ago I decided to improve the loading times of my website. 
-          It already loads pretty fast, but I knew there was still room for improvement
-        and one of them was CSS loading. I will walk you through the process and show you how 
-        you can improve your load times as well.To see how CSS affects the load time of a webpage 
-        we first have to know how the browser converts an HTML document into a functional webpage
-        is simply dummy text of the printing and typesetting industry.
-        
-          Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book.`"
-      />
-
-      <!-- Todo:: -->
-      <!-- style the blogs -->
-      <!-- fetch data from API -->
-      <Card 
-        v-for="i in 6"
-        :key="i"
-        :id="2346"
-        image="https://techcrunch.com/wp-content/uploads/2022/07/IMG_9938-Enhanced.jpg"
-        imageAlt="blog 2346 image"
-        title="Colors in Css"
-        category="Front-end"
-        :publishedDate="new Date('2022-07-09T09:00:16')"
-        content="Colors play a vital role in making a web page usable or not. In CSS, we can 
-        control the foreground and background color of an element with the color and background
-        properties.To see how CSS affects the load time of a webpage 
-        we first have to know how the browser converts an HTML document into a functional webpage
-        is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the 
-        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley 
-        of type and scrambled it to make a type specimen book."
-      />
+    
+      <p v-if="loading">
+        Loading...
+      </p>
+      
+      <template v-else>
+        <Card 
+          type="large"  
+          :key="latest.id"
+          :id="latest.id"
+          :image="latest.parsely.meta.image.url"
+          :imageAlt="latest.title.rendered"
+          :title="latest.title.rendered"
+          :category="latest.parsely.meta.keywords[1] || ''"
+          :publishedDate="new Date(latest.parsely.meta.datePublished)"
+          :content="latest.excerpt.rendered"
+        />
+        <div class="home__list">
+          <Card   
+            v-for="post in posts"
+            :key="post.id"
+            :id="post.id"
+            :image="post.parsely.meta.image.url"
+            :imageAlt="post.title.rendered"
+            :title="post.title.rendered"
+            :category="post.parsely.meta.keywords[1] || ''"
+            :publishedDate="new Date(post.parsely.meta.datePublished)"
+            :content="post.excerpt.rendered"
+          />  
+        </div>
+      </template>
     </section>
-
-    <Hero />
+    <Hero v-if="!isMember" @join="isMember = $event" />
   </div>
 </template>
 <script>
 import Card from '@/components/Card/index.vue'
 import Hero from '@/components/Hero/index.vue'
+import { computed, onMounted, ref } from '@vue/runtime-core'
+import { useStore } from 'vuex'
 
 export default {
   components: {
@@ -67,7 +48,36 @@ export default {
     Hero
   },
   setup() {
-    console.log('Home page')
+    const store = useStore()
+    const isMember = ref(null)
+    const loading = ref(false)
+    const allPost = computed(() => store.state.posts)
+    const posts = ref([])
+    const latest = ref({})
+
+    const fetchPosts = async () => {
+      loading.value = true
+      await store.dispatch('getAllPosts') 
+      const [ first ] = allPost.value
+
+      latest.value = first
+      posts.value = [...allPost.value]
+      posts.value.shift()
+
+      loading.value = false
+    }
+
+    fetchPosts()
+    onMounted(() => {
+      isMember.value = localStorage.getItem('member')
+    })
+
+    return {
+      loading,
+      posts,
+      latest,
+      isMember
+    }
   },
 }
 </script>

@@ -10,16 +10,19 @@
       <!-- styling -->
       <!-- add other semantic enhancemants -->
       <li class="nav__listItem">
-        <a href="http://"><Twitter /></a>
+        <a  href="http://"><Twitter/></a>
       </li>
+      .
       <li class="nav__listItem">
         <a href="http://"><Dribbble /></a>
       </li>
+      .
       <li class="nav__listItem">
         <a href="http://"><Figma /></a>
       </li>
+      .
       <li class="nav__listItem">
-        <a href="http://"><Twitter /></a>
+        <a href="http://"><Github/></a>
       </li>
     </ul>
   </nav>
